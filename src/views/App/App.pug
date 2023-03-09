@@ -1,8 +1,9 @@
 .app
-  .input
-    .input__container
-      .input__field 
-        input(type="text", value='{input}', onChange='{onInputChange}')
-      .input__show_area
+  Info()
   .canvas
     canvas(ref='{canvas}' height='{canvasSize.h}' width='{canvasSize.w}')
+  input.function-input(
+    type="text", value='{input}',
+    onChange='{onInputChange}'
+  )
+      

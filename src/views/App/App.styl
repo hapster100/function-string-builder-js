@@ -7,43 +7,8 @@ body, html
   height 100vh
   width 100vw
   background-color white
-  
-.input
-  position absolute
-  display: flex
-  flex-direction row
-  justify-content: center
-  align-items center
-  width 100vw
-  height 50px
-  z-index 10
-  margin-top: -75px
-  padding-top: 25px
-  padding-bottom: 200px
-  transition all 1s
 
-  &:hover
-    margin 0
-    transition all 1s
 
-  &__container
-    width: 75vw
-    background-color black
-  
-  &__field
-    width 100%
-    height 50px
-    display: flex
-    justify-content center
-    align-items center
-    padding: 10 10
-    & input
-      border 0
-      border-radius 0
-      height calc(100% - 20px)
-      width calc(100% - 40px) 
-      padding 0 10px
-      font-family monospace
 
 .canvas 
   width: 100%
@@ -51,4 +16,14 @@ body, html
   overflow hidden
   & canvas 
     width 100%
-    height 100%  
+    height 100%
+
+.function-input
+  border: 1px solid #333;
+  height: 30px;
+  padding: 4px;
+  font-size: 24px;
+  position: fixed;
+  bottom: 10px;
+  right: 50%;
+  transform: translate(50%)

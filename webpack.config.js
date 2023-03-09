@@ -12,7 +12,6 @@ module.exports = {
   },
   module: {
     rules: [
-      // {s
       {
         test: /\.pug$/,
         use: [{

@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect, Ref, RefObject, useCallback } from 'react'
+import { useState, useRef, useEffect, RefObject } from 'react'
 import AppTemplate from './App.pug'
 import store from '../../redux/store'
+import Info from '../Info/Info'
 import './App.styl'
 
 const countOf = (str : string, sub : string) => {
@@ -83,6 +84,8 @@ class FunctionParser {
       new Function('sin', ([x]) => Math.sin(x), 1),
       new Function('cos', ([x]) => Math.cos(x), 1),
       new Function('sqrt', ([x]) => Math.sqrt(x), 1),
+      new Function('log', ([x, y]) => Math.log(x)/Math.log(y), 1),
+      new Function('abs', ([x]) => Math.abs(x), 1)
     ]
 
     this.ops = [
@@ -150,7 +153,6 @@ class FunctionParser {
     for(const op of this.ops) { 
       const opstr : string = op.getStr()
 
-      let i = 0;
       for(
         let opIndex = inputString.lastIndexOf(opstr);
         opIndex !== -1; opIndex = inputString.lastIndexOf(opstr, opIndex - 1)
@@ -196,13 +198,13 @@ class FunctionRenderer {
     this.yRange = [-10 * this.h / this.w, 10 * this.h / this.w]
   }
 
-  private drawLine(from, to, width = 1) {
+  private drawLine(from, to, width = 1, style = '#000') {
     const ctx = this.canvas.current.getContext('2d')
     ctx.beginPath()
     ctx.moveTo(from[0], from[1])
     ctx.lineTo(to[0], to[1])
     ctx.lineWidth = width
-    ctx.strokeStyle = '#000000'
+    ctx.strokeStyle = style
     ctx.stroke()
 
   }
@@ -213,14 +215,31 @@ class FunctionRenderer {
     ctx.fillRect(0, 0, this.w, this.h)
     this.drawLine([0, this.h/2], [this.w, this.h/2])
     this.drawLine([this.w/2, 0], [this.w/2, this.h])
-
-
+    const [x1, y1] = this.canvasOne()
+    for(let i = this.h/2; i < this.h; i += y1) {
+      this.drawLine([0, i], [this.w, i], 0.5, '#AAA')
+    }
+    for(let i = this.h/2; i > 0; i -= y1) {
+      this.drawLine([0, i], [this.w, i], 0.5, '#AAA')
+    }
+    for(let i = this.w/2; i < this.w; i += x1) {
+      this.drawLine([i, 0], [i, this.h], 0.5, '#AAA')
+    }
+    for(let i = this.w/2; i > 0; i -=x1) {
+      this.drawLine([i, 0], [i, this.h], 0.5, '#AAA')
+    }
   }
 
   private toCanvasCoords([x, y]) {
     const cx = (x - this.xRange[0]) / (this.xRange[1] - this.xRange[0]) * this.w
     const cy = this.h - (y - this.yRange[0]) / (this.yRange[1] - this.yRange[0]) * this.h
     return [cx, cy]
+  }
+
+  private canvasOne() {
+    const [x0, y0] = this.toCanvasCoords([0, 0])
+    const [x1, y1] = this.toCanvasCoords([1, 1])
+    return [x1 - x0, y0 - y1]
   }
 
   public render(func) {
@@ -238,7 +257,7 @@ class FunctionRenderer {
 
 }
 
-const App = ({ tech }) => {
+const App = () => {
   const parser = new FunctionParser()
   
   const canvas = useRef<HTMLCanvasElement>(null)
@@ -253,8 +272,10 @@ const App = ({ tech }) => {
   }, [input])
 
   return AppTemplate({
+    Info,
     canvas, input, onInputChange: e => setInput(e.target.value),
     canvasSize: { h: document.body.clientHeight, w: document.body.clientWidth }
+
   })
 }
 

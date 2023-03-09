@@ -1,0 +1,31 @@
+.info(onClick="{handleHide}")
+  button.info__button(onClick="{handleShow}")
+    | i
+  if show
+    .info__body(onClick="{e => e.stopPropagation()}")
+      .info__categories
+        .info__category Functions: 
+          ul.info__list
+            li sin(a)
+            li cos(a)
+            li sqrt(a)
+            li log(a,base)
+            li abs(a)
+        .info__category Operators:
+          ul.info__list
+            li + 
+            li -
+            li *
+            li ^
+            li /
+        .info__category Constants: 
+          ul.info__list
+            li pi
+            li e
+        .info__category Variables:
+          ul.info__list
+            li x
+      .info__example Examples:
+        ul.info__list
+          li 4*x^2 + 2*x - 4
+          li x + log(x^2, 2) - pi
